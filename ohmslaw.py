@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import willie
 import math
 import re
@@ -9,7 +10,8 @@ def ohmcalc(bot, trigger):
 
     if not trigger.group(2) : return bot.reply('Usage example: .ohm 4.2v 1.8o')
     
-    rawreq = trigger.group(2).lower()
+    rawreq = trigger.group(2).replace(u'Ω', 'o').lower()
+ 
     request = re.match('^ *([0-9]*\.?[0-9]+) *([avwo]) +([0-9]*\.?[0-9]+) *([avwo]) *$', rawreq, re.I)
     
     if not request : return bot.reply('Error: Syntax error. Usage example: .ohm 4.2v 1.8o')
@@ -29,12 +31,12 @@ def ohmcalc(bot, trigger):
     
     if known == 'ao' or known == 'oa' :
         v = o * a
-        w = pow(a, 2) / o
+        w = pow(a, 2) * o
         a = numtostr(a)
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sA & %so ==> %sV & %sW' % (a, o, v, w))
+        bot.reply('%sA & %sΩ ==> %sV & %sW' % (a, o, v, w))
         
     if known == 'av' or known == 'va' :
         w = v * a
@@ -43,7 +45,7 @@ def ohmcalc(bot, trigger):
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sA & %sV ==> %sW & %so' % (a, v, w, o))
+        bot.reply('%sA & %sV ==> %sW & %sΩ' % (a, v, w, o))
         
     if known == 'aw' or known == 'wa' :
         v = w / a
@@ -52,7 +54,7 @@ def ohmcalc(bot, trigger):
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sA & %sW ==> %sV %so' % (a, w, v, o))
+        bot.reply('%sA & %sW ==> %sV %sΩ' % (a, w, v, o))
         
     if known == 'vo' or known == 'ov' :
         a = v / o
@@ -61,7 +63,7 @@ def ohmcalc(bot, trigger):
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sV & %so ==> %sW & %sA' % (v, o, w, a))
+        bot.reply('%sV & %sΩ ==> %sW & %sA' % (v, o, w, a))
         
     if known == 'vw' or known == 'wv' :
         a = w / v
@@ -70,7 +72,7 @@ def ohmcalc(bot, trigger):
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sV & %sW ==> %so & %sA' % (v, w, o, a))
+        bot.reply('%sV & %sW ==> %sΩ & %sA' % (v, w, o, a))
         
     if known == 'wo' or known == 'ow' :
         a = math.sqrt(w / o)
@@ -79,7 +81,7 @@ def ohmcalc(bot, trigger):
         o = numtostr(o)
         v = numtostr(v)
         w = numtostr(w)
-        bot.reply('%sW & %so ==> %sA & %sV' % (w, o, a, v))
+        bot.reply('%sW & %sΩ ==> %sA & %sV' % (w, o, a, v))
         
 def numtostr( n ):
     n = round(n, 2)
